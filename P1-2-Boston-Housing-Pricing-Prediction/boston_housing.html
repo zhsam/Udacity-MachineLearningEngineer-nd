@@ -11803,7 +11803,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Import libraries necessary for this project</span>
@@ -11881,23 +11881,23 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># TODO: Minimum price of the data</span>
-<span class="n">minimum_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="n">minimum_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># TODO: Maximum price of the data</span>
-<span class="n">maximum_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="n">maximum_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># TODO: Mean price of the data</span>
-<span class="n">mean_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">mean_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># TODO: Median price of the data</span>
-<span class="n">median_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+<span class="n">median_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># TODO: Standard deviation of prices of the data</span>
-<span class="n">std_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="n">std_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># Show the calculated statistics</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Statistics for Boston housing dataset:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -11928,7 +11928,7 @@ Minimum price: $105000.00
 Maximum price: $1024800.00
 Mean price: $454342.94
 Median price $438900.00
-Standard deviation of prices: $165340.28
+Standard deviation of prices: $165171.13
 </pre>
 </div>
 </div>
@@ -11969,8 +11969,124 @@ Standard deviation of prices: $165340.28
 <ul>
 <li><code>'RM'</code> 越高，<code>'MEDV'</code>越高。平均房间数量越高，房间的平均大小也越大，因此价格更高。</li>
 <li><code>'LSTAT'</code> 越高，<code>'MEDV'</code>越低。平均低收入比例越低，代表该区域的消费水平越低，因此房价应该也越低。</li>
-<li><code>'PTRATIO'</code> 越高，<code>'MEDV'</code>越高。该地区平均学生的比例越高，代表有很多学生选择住在附近，需求高，自然价格提高。</li>
+<li><code>'PTRATIO'</code> 越高，<code>'MEDV'</code>越低。该地区平均学生的比例越高，说明了这个地方的师资比较差，因此房价应该也越低。</li>
 </ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;PTRATIO&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">MEDV</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;PTRATIO&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[24]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PTRATIO</th>
+      <th>MEDV</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>12.6</td>
+      <td>687400.000000</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>15.2</td>
+      <td>551815.384615</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>16.1</td>
+      <td>522480.000000</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>17.0</td>
+      <td>642600.000000</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>17.4</td>
+      <td>684105.882353</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>17.9</td>
+      <td>469636.363636</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>19.0</td>
+      <td>522900.000000</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>19.6</td>
+      <td>474075.000000</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>20.2</td>
+      <td>321848.507463</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>21.2</td>
+      <td>358960.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>以上验证了直觉的推测，<code>'PTRATIO'</code> 越高，<code>'MEDV'</code>越低。</p>
 
 </div>
 </div>
@@ -13900,9 +14016,10 @@ A: 最大深度为4的时候，在方差相对一致的情况下，拥有最高�
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Q: 什么是网格搜索法？<br>
-A: 网格搜索法，是一种系统性获取相对优秀模型的方法。首先列出来不同超参数的可能性，通过在不同超参数下，进行模型训练、交叉验证、计算F1分数，最后选择F1分数最高的模型，进行测试，便能得到相对优秀的模型。</p>
+A: 网格搜索算法(Grid Search)，是一种通过尝试各种给定的参数组合，来优化模型表现的方法。</p>
 <p>Q: 如何用它来优化模型？<br>
-A: 通过网格搜索法，我们可以列出多种超参数的可能性，在不同可能性下训练、交叉验证模型，并计算不同模型的F1分数，最后选择F1分数最高的模型，进行测试，便能得到相对优秀的模型。</p>
+A: 以决策树为例，当我们确定了要使用决策树算法的时候，为了能够更好地拟合、预测，我们需要对参数进行调整。在决策树算法中，我们通常选择的参数(超参数)是决策树的「最大深度」。于是我们会给出一系列的最大深度的值，比如 {'max_depth': [1,2,3,4,5]}，我们会尽可能包含最优最大深度。</p>
+<p>参考文件：<a href="https://zhuanlan.zhihu.com/p/25637642">网格搜索算法与K折交叉验证</a></p>
 
 </div>
 </div>
@@ -13936,13 +14053,14 @@ A: 通过网格搜索法，我们可以列出多种超参数的可能性，在�
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Q: 什么是K折交叉验证法（k-fold cross-validation）？<br>
-A: K折交叉验证法的意思，是将数据分成K包，训练模型K次。每一次使用不同的包作为测试集，剩下的数据作为训练集，最后将结果平均以获得最终的模型。</p>
+A: K折交叉验证把训练集划分为K份。每次取K-1份作为模型的训练数据，剩下的一份作为模型的验证数据，并测试模型在验证集上的误差。在重复K次后，把K个不相交的验证集上的误差求平均，作为期望泛化误差的估计。在此验证数据是从训练集中抽取的。</p>
 <p>Q: GridSearchCV 是如何结合交叉验证来完成对最佳参数组合的选择的？<br>
-A: GridSearchCV 在列出超参数之后，会训练模型，并且使用交叉验证法，最后计算出各个模型f1_score的平均。</p>
+A: GridSearchCV会根据我们给出的超参数，在每一个超参数的情况下，使用K折交叉验证，把K个不相交的验证集上的误差求平均，算出期望泛化误差的估计。最后选择期望泛化误差最低的模型，作为最优模型，告诉我们期望泛化误差最低的模型的超参数为何。</p>
 <p>Q: GridSearchCV 中的'cv<em>results</em>'属性能告诉我们什么？<br>
 A: 'cv<em>results</em>'属性能告诉我们平均的训练/测试分数，每一次切分的训练/测试分数等信息。</p>
 <p>Q: 网格搜索为什么要使用K折交叉验证？K折交叉验证能够避免什么问题？<br>
-A: 网格搜索在不同超参数下，训练模型，计算、比较模型的f1分数。在训练模型，会网格搜索会使用交叉验证法，计算模型的平均f1分数。使用K折交叉验证可以避免模型因为训练集、测试集的选择，导致的误差。</p>
+A: 使用网格搜索时，为了知道模型是最好的，我们需要一种可靠的评分方法，因此使用K折交叉验证，帮助我们估算出每个模型的期望泛化误差，选择期望泛化误差最低的模型，作为最优模型。</p>
+<p>如果我们对着测试集进行参数调优，会使得我们低估(under-estimate)模型的泛化误差。因为你此时是试图让模型在这个特定的测试集上误差更小。使用K折交叉验证，可以让我们更好的估算每个模型的期望泛化误差。</p>
 
 </div>
 </div>
@@ -14439,7 +14557,7 @@ Range in prices: $29,438.89
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Q: 1978年所采集的数据，在已考虑通货膨胀的前提下，在今天是否仍然适用？<br>
-A: 在考虑通货膨胀的情况下，此数据在今天不适用，需要根据通货膨胀指数进行修正。</p>
+A: 在考虑通货膨胀的前提下，1978年所采集的数据今日依然不适用。当地经济发展、建筑材料、地价等多项因素的影响下，当时的数据对今日的房价预测不适用。</p>
 <p>Q: 数据中呈现的特征是否足够描述一个房屋？<br>
 A: 数据中呈现的特征，可以描述房屋大部分属性。</p>
 <p>Q: 在波士顿这样的大都市采集的数据，能否应用在其它乡镇地区？<br>
