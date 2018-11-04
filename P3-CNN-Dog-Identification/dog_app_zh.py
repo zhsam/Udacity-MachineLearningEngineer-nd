@@ -193,34 +193,13 @@ human_files_short = human_files[:100]
 dog_files_short = train_files[:100]
 ## 请不要修改上方代码
 
-
 ## TODO: 基于human_files_short和dog_files_short
 ## 中的图像测试face_detector的表现
-human_detectHuman_performance = 0
-dog_detectHuman_performance = 0
 
-# face detection for human files
-print("start detecting human files...")
-
-for i in human_files_short:
-
-    if face_detector(i) == True:
-        human_detectHuman_performance += 1
-
-print("Finish detecting human files.")
-
-# face detection for dogs files
-print("start detecting dogs files...")
-
-for i in dog_files_short:
-    if face_detector(i) == True:
-        dog_detectHuman_performance += 1
-
-print("Finish detecting dogs files.")
-
-# print the conclusion for the detection
-print('The face detector detects that total {}% images contain human faces in the human images data.'.format(human_detectHuman_performance))
-print('The face detector detects that total {}% images contain human faces in the dogs images data.'.format(dog_detectHuman_performance))
+def detect(detector, file):
+    return np.mean([detector(i) for i in file])
+print('human: {:.2%}'.format(detect(face_detector, human_files_short)))
+print('dog: {:.2%}'.format(detect(face_detector, dog_files_short)))
 
 
 # __回答1:__ 
@@ -363,33 +342,9 @@ def dog_detector(img_path):
 
 ### TODO: 测试dog_detector函数在human_files_short和dog_files_short的表现
 
-
-human_detectDog_performance = 0
-dog_detectDog_performance = 0
-
 # dog detection for human files
-print("start detecting human files...")
-print("Using dog_dectector")
-
-
-for i in human_files_short:
-    if dog_detector(i) == True:
-        human_detectDog_performance += 1
-
-print("Finish detecting human files.")
-
-# face detection for dogs files
-print("start detecting dogs files...")
-print("Using dog_dectector")
-for i in dog_files_short:
-    if dog_detector(i) == True:
-        dog_detectDog_performance += 1
-
-print("Finish detecting dogs files.")
-
-# print the conclusion for the detection
-print('The face detector detects that total {}% images contain dogs in the human images data.'.format(human_detectDog_performance))
-print('The face detector detects that total {}% images contain dogs in the dogs images data.'.format(dog_detectDog_performance))
+print('human: {:.2%}'.format(detect(dog_detector, human_files_short)))
+print('dog: {:.2%}'.format(detect(dog_detector, dog_files_short)))
 
 
 # __回答3:__ 
@@ -522,7 +477,7 @@ model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['ac
 # 
 # 
 
-# In[15]:
+# In[25]:
 
 
 from keras.callbacks import ModelCheckpoint  
@@ -542,7 +497,7 @@ model.fit(train_tensors, train_targets,
           epochs=epochs, batch_size=20, callbacks=[checkpointer], verbose=1)
 
 
-# In[16]:
+# In[26]:
 
 
 ## 加载具有最好验证loss的模型
@@ -554,7 +509,7 @@ model.load_weights('saved_models/weights.best.from_scratch.hdf5')
 # 
 # 在狗图像的测试数据集上试用你的模型。确保测试准确率大于1%。
 
-# In[17]:
+# In[27]:
 
 
 # 获取测试数据集中每一个图像所预测的狗品种的index
@@ -575,7 +530,7 @@ print('Test accuracy: %.4f%%' % test_accuracy)
 
 # ### 得到从图像中提取的特征向量（Bottleneck Features）
 
-# In[18]:
+# In[28]:
 
 
 bottleneck_features = np.load('/data/bottleneck_features/DogVGG16Data.npz')
@@ -588,7 +543,7 @@ test_VGG16 = bottleneck_features['test']
 # 
 # 该模型使用预训练的 VGG-16 模型作为固定的图像特征提取器，其中 VGG-16 最后一层卷积层的输出被直接输入到我们的模型。我们只需要添加一个全局平均池化层以及一个全连接层，其中全连接层使用 softmax 激活函数，对每一个狗的种类都包含一个节点。
 
-# In[19]:
+# In[29]:
 
 
 VGG16_model = Sequential()
@@ -598,7 +553,7 @@ VGG16_model.add(Dense(133, activation='softmax'))
 VGG16_model.summary()
 
 
-# In[20]:
+# In[30]:
 
 
 ## 编译模型
@@ -606,7 +561,7 @@ VGG16_model.summary()
 VGG16_model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
 
 
-# In[21]:
+# In[31]:
 
 
 ## 训练模型
@@ -619,7 +574,7 @@ VGG16_model.fit(train_VGG16, train_targets,
           epochs=20, batch_size=20, callbacks=[checkpointer], verbose=1)
 
 
-# In[22]:
+# In[32]:
 
 
 ## 加载具有最好验证loss的模型
@@ -630,7 +585,7 @@ VGG16_model.load_weights('saved_models/weights.best.VGG16.hdf5')
 # ### 测试模型
 # 现在，我们可以测试此CNN在狗图像测试数据集中识别品种的效果如何。我们在下方打印出测试准确率。
 
-# In[23]:
+# In[33]:
 
 
 # 获取测试数据集中每一个图像所预测的狗品种的index
@@ -686,7 +641,7 @@ def VGG16_predict_breed(img_path):
 #     valid_{network} = bottleneck_features['valid']
 #     test_{network} = bottleneck_features['test']
 
-# In[25]:
+# In[34]:
 
 
 ### TODO: 从另一个预训练的CNN获取bottleneck特征
@@ -714,24 +669,37 @@ test_Resnet50 = bottleneck_features['test']
 # 
 # __回答6:__ 
 # 
-# 在Resnet50架构之后，加上了一个全局平均池化层，加深模型对于纹理的理解。
-# 最后以Dense层，softmax函数作为输出。
+# - 模型架构：
+# 在Resnet50架构之后，加上了一个全局平均池化层，加深模型对于纹理的理解。最后以Dense层，softmax函数作为输出。
+# 
+# - 为什么相比普通的CNN，迁移学习可以取得更好的效果？
+# 迁移学习站在巨人的肩膀上，使用众多科学家努力完成、调优的模型，处理图片识别任务中，前期对于边缘、色块、线条等的识别，仅在最后加上与训练数据集相关的层级，可以快速搭建一个效果好的模型。
+# 
+# 相比普通CNN，未把最后的与训练集有关的层级去除，因此效果没有迁移学习好。
+# 
+# - 为什么第三步中的尝试没有迁移学习的效果好？
+# 承上，第三步的尝试中，模型未经过调优，对于前期边缘、色块、线条等的识别、后期较特定的过滤器，表现均不好，因此效果没有迁移学习好。
+# 
+# - 为什么选择了Resnet50，而不是其他模型？
+# 选择Resnet50的原因，Resnet以他非常深的层级著称，最高152层。由于具有很深的层级，Resnet加入了一些链接，避免训练的过程中，产生信号梯度消失的问题。我认为这样的设置非常聪明，通过加入一些跨层的链接，协助信号的传递，因此尝试使用了Resnet50搭建迁移学习的模型。
+# 
+# 参考资料：[ResNet的论文](https://arxiv.org/pdf/1512.03385v1.pdf)
 
-# In[26]:
+# In[35]:
 
 
 ### TODO: 定义你的框架
-model = Sequential()
-model.add(GlobalAveragePooling2D(input_shape=(1,1,2048)))
-model.add(Dense(133, activation = 'softmax'))
-model.summary()
+Resnet50_model = Sequential()
+Resnet50_model.add(GlobalAveragePooling2D(input_shape=(1,1,2048)))
+Resnet50_model.add(Dense(133, activation = 'softmax'))
+Resnet50_model.summary()
 
 
-# In[27]:
+# In[36]:
 
 
 ### TODO: 编译模型
-model.compile(loss='categorical_crossentropy', optimizer='rmsprop',
+Resnet50_model.compile(loss='categorical_crossentropy', optimizer='rmsprop',
               metrics=['accuracy'])
 
 
@@ -748,21 +716,21 @@ model.compile(loss='categorical_crossentropy', optimizer='rmsprop',
 # 当然，你也可以对训练集进行 [数据增强](https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html) 以优化模型的表现，不过这不是必须的步骤。
 # 
 
-# In[28]:
+# In[37]:
 
 
 ### TODO: 训练模型
 checkpointer = ModelCheckpoint(filepath='DogResnet50.weights.best.hdf5', verbose=1,
                               save_best_only=True)
-model.fit(train_Resnet50, train_targets, epochs=20, validation_data=(valid_Resnet50, valid_targets),
+Resnet50_model.fit(train_Resnet50, train_targets, epochs=20, validation_data=(valid_Resnet50, valid_targets),
          callbacks=[checkpointer], verbose=1, shuffle=True)
 
 
-# In[29]:
+# In[38]:
 
 
 ### TODO: 加载具有最佳验证loss的模型权重
-model.load_weights('DogResnet50.weights.best.hdf5')
+Resnet50_model.load_weights('DogResnet50.weights.best.hdf5')
 
 
 # ---
@@ -775,12 +743,12 @@ model.load_weights('DogResnet50.weights.best.hdf5')
 # 
 # 在狗图像的测试数据集上试用你的模型。确保测试准确率大于60%。
 
-# In[30]:
+# In[39]:
 
 
 ### TODO: 在测试集上计算分类准确率
 # get index of predicted dog breed for each image in test set
-Resnet50_predictions = [np.argmax(model.predict(np.expand_dims(feature, axis=0))) 
+Resnet50_predictions = [np.argmax(Resnet50_model.predict(np.expand_dims(feature, axis=0))) 
                          for feature in test_Resnet50]
 
 # report test accuracy
@@ -810,7 +778,7 @@ print('\nTest accuracy: %.4f%%' % test_accuracy)
 # 
 # ### __问题 9:__
 
-# In[43]:
+# In[40]:
 
 
 ### TODO: 写一个函数，该函数将图像的路径作为输入
@@ -821,13 +789,13 @@ def Resnet50_dogdetection(img_path):
     bottleneck_features = extract_Resnet50(path_to_tensor(img_path))
 #     print(bottleneck_features)
     # 将图像特徵输入到模型
-    predicted_vector = model.predict(bottleneck_features)
+    predicted_vector = Resnet50_model.predict(bottleneck_features)
 #     print(predicted_vector)
     # 返回对应的狗种类名称
     return dog_names[np.argmax(predicted_vector)].split(".")[1]
 
 
-# In[44]:
+# In[41]:
 
 
 print(Resnet50_dogdetection(human_files[2]))
@@ -864,7 +832,7 @@ print(Resnet50_dogdetection(human_files[2]))
 # ---
 # 
 
-# In[45]:
+# In[43]:
 
 
 ### TODO: 设计你的算法
@@ -874,25 +842,16 @@ print(Resnet50_dogdetection(human_files[2]))
 # 如果从图像中检测到人，返回最相像的狗品种。
 # 如果两者都不能在图像中检测到，输出错误提示
 
-from PIL import Image
+from PIL import Image        
 
 def dog_app(img_path):
-    # check whether dog or human
-    if (face_detector(img_path)) == True:
-        print("Hi, Human!") # print dog / human
-        display(Image.open(img_path))
-        print("You look like a...") # print dog_type
-        print(Resnet50_dogdetection(img_path))
-        print("----------------")
-    elif (dog_detector(img_path)) == True:
-        print("Hi, Doggy!") # print dog / human
-        display(Image.open(img_path))
-        print("You look like a...") # print dog_type
-        print(Resnet50_dogdetection(img_path))
-        print("----------------")
+    display(Image.open(img_path))
+    if dog_detector(img_path):
+        print('Hi, dog! I guess you are a {}!'.format(Resnet50_dogdetection(img_path)))
+    elif face_detector(img_path):
+        print('Hello, human! You look like a {}!'.format(Resnet50_dogdetection(img_path)))
     else:
-        print("Some thing wrong, you are neither dog nor human!")
-        display(Image.open(img_path)) # print image
+        print("Error!")
 
 
 # ---
@@ -913,29 +872,35 @@ def dog_app(img_path):
 # 1. 输出结果比你预想的要好吗 :) ？或者更糟 :( ？
 # 2. 提出至少三点改进你的模型的想法。
 
-# In[46]:
+# In[45]:
+
+
+human_files[2]
+
+
+# In[66]:
+
+
+user_test = glob("user-image/*")
+user_test
+
+
+# In[67]:
 
 
 ## TODO: 在你的电脑上，在步骤6中，至少在6张图片上运行你的算法。
 ## 自由地使用所需的代码单元数吧
-
-human_random = int(np.random.randint(low=5,high=13233, size = 1))
-dog_random   = int(np.random.randint(low=5,high=6680, size = 1))
-
-human_files_rnd = human_files[human_random-5:human_random]
-dog_files_rnd   = train_files[dog_random-5:dog_random]
-
-for i in range(5):
-    dog_app(human_files_rnd[i])
-    dog_app(dog_files_rnd[i])
+[dog_app(i) for i in user_test]
 
 
 # __回答11:__ 
-# 1. 输出结果比你预想的好，可以准确的识别出图片为人物或是狗狗，对于狗狗品种在测试集的准确率达81%以上
-# 2. 至少三点改进模型的想法：
+# 1. 输出结果比我预想的好，可以准确的识别出图片中的狗狗，但是有些小姐姐／小哥哥被face_detector识别为人物。
+# 2. 对当前模型改进的想法：
 #     - 目前模型使用了Resnet50作为迁移学习的原始模型，可以尝试使用其他的模型架构改进目前的模型，例如：VGG19、InceptionV3 或 Xception等。
-#     - 可以对训练集进行数据增强，来优化模型的表现。
+#     - 导入交叉验证：按某种方式，多次进行训练集/测试集切分，最终取加权平均值。(参考 [维基百科](https://en.wikipedia.org/wiki/Cross-validation_(statistics)))
+#     - 可以对训练集进行「数据增强」，来优化模型的表现。
 #     - 在Resnet50架构之后，目前加上的是「全局平均池化层」，可以尝试使用不同的池化层、不同的池化层设置，改进模型的准确率。
+#     - 多目标监测：可以倒入一些先进的算法，例如：RCNN、Fast-RCNN等，识别图片中的多个目标。
 
 # **注意: 当你写完了所有的代码，并且回答了所有的问题。你就可以把你的 iPython Notebook 导出成 HTML 文件。你可以在菜单栏，这样导出File -> Download as -> HTML (.html)把这个 HTML 和这个 iPython notebook 一起做为你的作业提交。**
 
