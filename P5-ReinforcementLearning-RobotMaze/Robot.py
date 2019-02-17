@@ -76,23 +76,25 @@ class Robot(object):
         Return an action according to given rules
         """
         def is_random_exploration():
-
             # TODO 5. Return whether do random choice
             # hint: generate a random number, and compare
             # it with epsilon
+            return np.random.choice(2,1,p=[1-self.epsilon,self.epsilon])
             pass
 
         if self.learning:
             if is_random_exploration():
                 # TODO 6. Return random choose aciton
-                return None
+                return actions[random.randint(0,3)]
             else:
                 # TODO 7. Return action with highest q value
                 return None
         elif self.testing:
             # TODO 7. choose action with highest q value
+            
         else:
             # TODO 6. Return random choose aciton
+            return actions[random.randint(0,3)]
 
     def update_Qtable(self, r, action, next_state):
         """
