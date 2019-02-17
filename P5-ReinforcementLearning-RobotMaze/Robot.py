@@ -68,10 +68,10 @@ class Robot(object):
         # Qtable[state] ={'u':xx, 'd':xx, ...}
         # If Qtable[state] already exits, then do
         # not change it.
-        if self.Qtable[self.state] is not null:
+        if self.Qtable[state] is not null:
             pass
         else:
-            self.Qtable[self.state].popitem({self.action:self.maze.move_robot(self.action)})
+            self.Qtable[state].popitem({self.action:self.maze.move_robot(self.action)})
         pass
 
     def choose_action(self):
