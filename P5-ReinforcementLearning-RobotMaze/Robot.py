@@ -104,7 +104,7 @@ class Robot(object):
         Update the qtable according to the given rule.
         """
         if self.learning:
-
+            self.Qtable[self.state].update(self.state, self.action, r, next_state, action)
             pass
             # TODO 8. When learning, update the q table according
             # to the given rules
