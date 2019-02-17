@@ -53,9 +53,8 @@ class Robot(object):
         """
         Get the current state of the robot. In this
         """
-
         # TODO 3. Return robot's current state
-        return None
+        return self.maze.sense_robot()
 
     def create_Qtable_line(self, state):
         """
