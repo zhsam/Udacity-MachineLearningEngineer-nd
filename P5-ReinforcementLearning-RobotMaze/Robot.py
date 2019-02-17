@@ -42,9 +42,12 @@ class Robot(object):
         """
         if self.testing:
             # TODO 1. No random choice when testing
+            # epsilon = 0, only choose greedy policy
+            self.epsilon = 0
             pass
         else:
             # TODO 2. Update parameters when learning
+            self.epsilon = (self.alpha ** self.t)
             pass
 
         return self.epsilon
