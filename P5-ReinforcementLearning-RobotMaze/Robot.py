@@ -68,6 +68,7 @@ class Robot(object):
         # Qtable[state] ={'u':xx, 'd':xx, ...}
         # If Qtable[state] already exits, then do
         # not change it.
+        self.Qtable[self.state].append({self.action:self.maze.move_robot(self.action)})
         pass
 
     def choose_action(self):
