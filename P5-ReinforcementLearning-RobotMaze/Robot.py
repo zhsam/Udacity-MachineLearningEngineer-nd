@@ -68,7 +68,7 @@ class Robot(object):
         # Qtable[state] ={'u':xx, 'd':xx, ...}
         # If Qtable[state] already exits, then do
         # not change it.
-        self.Qtable[self.state].append({self.action:self.maze.move_robot(self.action)})
+        self.Qtable[self.state].popitem({self.action:self.maze.move_robot(self.action)})
         pass
 
     def choose_action(self):
@@ -88,10 +88,10 @@ class Robot(object):
                 return actions[random.randint(0,3)]
             else:
                 # TODO 7. Return action with highest q value
-                return None
+                return max([(value, key) for key, value in self.Qtable.items()])[1]
         elif self.testing:
             # TODO 7. choose action with highest q value
-            
+            return max([(value, key) for key, value in self.Qtable.items()])[1]
         else:
             # TODO 6. Return random choose aciton
             return actions[random.randint(0,3)]
