@@ -69,9 +69,7 @@ class Robot(object):
         # Qtable[state] ={'u':xx, 'd':xx, ...}
         # If Qtable[state] already exits, then do
         # not change it.
-        if state in self.Qtable.keys():
-            print('already exists!')
-        else:
+        if state not in self.Qtable.keys():
             self.Qtable[state] = {'u':0, 'r':0, 'd':0, 'l':0}
         pass
 
@@ -124,7 +122,7 @@ class Robot(object):
         self.create_Qtable_line(self.state) # For the state, create q table line
 
         action = self.choose_action() # choose action for this state
-        print(action)
+        # print(action)
         reward = self.maze.move_robot(action) # move robot for given action
 
         next_state = self.sense_state() # get next state
