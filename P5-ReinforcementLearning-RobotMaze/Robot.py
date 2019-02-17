@@ -1,4 +1,5 @@
 import random
+import numpy as np
 
 class Robot(object):
 
@@ -68,43 +69,47 @@ class Robot(object):
         # Qtable[state] ={'u':xx, 'd':xx, ...}
         # If Qtable[state] already exits, then do
         # not change it.
-        if self.Qtable[state] is not null:
-            pass
+        if state in self.Qtable.keys():
+            print('already exists!')
         else:
-            self.Qtable[state].popitem({self.action:self.maze.move_robot(self.action)})
+            self.Qtable[state] = {'u':0, 'r':0, 'd':0, 'l':0}
         pass
 
     def choose_action(self):
         """
         Return an action according to given rules
         """
+        actions = ['u','r','d','l']
         def is_random_exploration():
             # TODO 5. Return whether do random choice
             # hint: generate a random number, and compare
             # it with epsilon
             return np.random.choice(2,1,p=[1-self.epsilon,self.epsilon])
             pass
-
         if self.learning:
             if is_random_exploration():
                 # TODO 6. Return random choose aciton
-                return actions[random.randint(0,3)]
+                action = actions[random.randint(0,3)]
+                return action
             else:
                 # TODO 7. Return action with highest q value
-                return max([(value, key) for key, value in self.Qtable.items()])[1]
+                action = max([(value, key) for key, value in self.Qtable[self.state].items()])[1]
+                return action
         elif self.testing:
             # TODO 7. choose action with highest q value
-            return max([(value, key) for key, value in self.Qtable.items()])[1]
+            action = max([(value, key) for key, value in self.Qtable[self.state].items()])[1]
+            return action
         else:
             # TODO 6. Return random choose aciton
-            return actions[random.randint(0,3)]
+            action = actions[random.randint(0,3)]
+            return action
 
-    def update_Qtable(self, r, action, next_state):
+    def  update_Qtable(self, r, action, next_state):
         """
         Update the qtable according to the given rule.
         """
         if self.learning:
-            self.Qtable[self.state].update(self.state, self.action, r, next_state, action)
+            self.Qtable[self.state][action] = self.Qtable[self.state][action] + self.alpha*(r+self.gamma*max(self.Qtable[next_state].values()) - self.Qtable[self.state][action])
             pass
             # TODO 8. When learning, update the q table according
             # to the given rules
@@ -119,6 +124,7 @@ class Robot(object):
         self.create_Qtable_line(self.state) # For the state, create q table line
 
         action = self.choose_action() # choose action for this state
+        print(action)
         reward = self.maze.move_robot(action) # move robot for given action
 
         next_state = self.sense_state() # get next state
