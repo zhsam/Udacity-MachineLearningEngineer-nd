@@ -48,7 +48,8 @@ class Robot(object):
             pass
         else:
             # TODO 2. Update parameters when learning
-            self.epsilon = (self.alpha ** self.t)
+            self.t += 1
+            self.epsilon *= 0.99
             pass
 
         return self.epsilon
@@ -69,8 +70,7 @@ class Robot(object):
         # Qtable[state] ={'u':xx, 'd':xx, ...}
         # If Qtable[state] already exits, then do
         # not change it.
-        if state not in self.Qtable.keys():
-            self.Qtable[state] = {'u':0, 'r':0, 'd':0, 'l':0}
+        self.Qtable.setdefault(state, {a: 0.0 for a in self.valid_actions})
         pass
 
     def choose_action(self):
