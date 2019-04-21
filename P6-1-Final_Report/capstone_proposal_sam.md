@@ -15,9 +15,8 @@ April 20st, 2019
 
 
 ### 问题描述 Problem Statement
-_(approx. 1 paragraph)_
 
-In this section, clearly describe the problem that is to be solved. The problem described should be well defined and should have at least one relevant potential solution. Additionally, describe the problem thoroughly such that it is clear that the problem is quantifiable (the problem can be expressed in mathematical or logical terms) , measurable (the problem can be measured by some metric and clearly observed), and replicable (the problem can be reproduced and occurs more than once).
+本项目源自于Kaggle数据竞赛平台上，[猫狗大战图像识别项目](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/overview)。项目包含了37,500张猫或者狗的图片，欲通过训练一个深度学习图像识别的模型，识别图片中的主体是猫，还是狗。若模型识别出图片中的主体是猫，则标记为0；若模型识别出图片中的主体是狗，则标记为1。一个潜在的解决方案，是以ImageNet的获胜者模型(VGG, ResNet等)为基底，通过迁移学习的方式，最后加上池化层、Dense层。迁移学习搭建的模型，可以识别狗的品种、猫的品种，最后搭建一个函数，若识别的结果为狗的品种之一，则输出为1；若为猫的品种之一，则输出为0，如此即可建立猫狗图像识别的模型。
 
 
 ### 数据集 Datasets and Inputs
