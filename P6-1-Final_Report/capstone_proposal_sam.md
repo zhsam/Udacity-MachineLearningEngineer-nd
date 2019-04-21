@@ -16,47 +16,57 @@ April 20st, 2019
 
 ### 问题描述 Problem Statement
 
-本项目源自于Kaggle数据竞赛平台上，[猫狗大战图像识别项目](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/overview)。项目包含了37,500张猫或者狗的图片，欲通过训练一个深度学习图像识别的模型，识别图片中的主体是猫，还是狗。若模型识别出图片中的主体是猫，则标记为0；若模型识别出图片中的主体是狗，则标记为1。一个潜在的解决方案，是以ImageNet的获胜者模型(VGG, ResNet等)为基底，通过迁移学习的方式，最后加上池化层、Dense层。迁移学习搭建的模型，可以识别狗的品种、猫的品种，最后搭建一个函数，若识别的结果为狗的品种之一，则输出为1；若为猫的品种之一，则输出为0，如此即可建立猫狗图像识别的模型。
+本项目源自于Kaggle数据竞赛平台上，[猫狗大战图像识别项目](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/overview)。项目包含了37,500张猫或者狗的图片，欲通过训练一个深度学习图像识别的模型，识别图片中的主体是狗的概率。(若模型识别出图片中的主体是猫，则概率为0；若模型识别出图片中的主体是狗，则概率为1。)一个潜在的解决方案，是以ImageNet的获胜者模型(VGG, ResNet等)为基底，通过迁移学习的方式，搭建模型。最后搭建一个函数，若识别出的前 n 个结果有 x 个为狗的品种之一，则这个图片为狗的概率为 x/n 。
 
 
 ### 数据集 Datasets and Inputs
-_(approx. 2-3 paragraphs)_
 
-In this section, the dataset(s) and/or input(s) being considered for the project should be thoroughly described, such as how they relate to the problem and why they should be used. Information such as how the dataset or input is (was) obtained, and the characteristics of the dataset or input, should be included with relevant references and citations as necessary It should be clear how the dataset(s) or input(s) will be used in the project and whether their use is appropriate given the context of the problem.
+本项目的数据集由Kaggle提供，其中包含25,000张训练集数据；12,500张测试集数据。数据集可以在[这个地址](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data)获取。
+
+图片可能存在几个问题：
+1. 图片中未包含猫或者狗
+2. 图片的尺寸不固定
+3. 图片中的猫或者狗可能在图片比较边缘的位置
+
+在实际执行项目的过程中，将会跟据上述几个问题进行处理。
 
 
 ### 解决方案 Solution Statement
-_(approx. 1 paragraph)_
 
-In this section, clearly describe a solution to the problem. The solution should be applicable to the project domain and appropriate for the dataset(s) or input(s) given. Additionally, describe the solution thoroughly such that it is clear that the solution is quantifiable (the solution can be expressed in mathematical or logical terms) , measurable (the solution can be measured by some metric and clearly observed), and replicable (the solution can be reproduced and occurs more than once).
-
+这个问题，可以通过迁移学习解决。以ImageNet的获胜者模型(VGG, ResNet等)为基底，通过迁移学习的方式，去掉最后一层，并在其后加上池化层、Dense层等。迁移学习搭建的模型，可以识别图片中的主题为某个狗/猫品种的概率。在迁移学习的模型之后，加上一个函数，若识别出的前 n 个结果有 x 个为狗的品种之一，则这个图片为狗的概率为 x/n 。
 
 ### 模型标杆 Benchmark Model
-_(approximately 1-2 paragraphs)_
 
-In this section, provide the details for a benchmark model or result that relates to the domain, problem statement, and intended solution. Ideally, the benchmark model or result contextualizes existing methods or known information in the domain and problem given, which could then be objectively compared to the solution. Describe how the benchmark model or result is measurable (can be measured by some metric and clearly observed) with thorough detail.
+这个项目中，在原始有效的比赛时间里，共有1314个提交。以Leaderboard前10%做为标杆，Log Loss值需要达到 0.06320以下。
 
 ### 评估指标 Evaluation Metrics
-_(approx. 1-2 paragraphs)_
 
-In this section, propose at least one evaluation metric that can be used to quantify the performance of both the benchmark model and the solution model. The evaluation metric(s) you propose should be appropriate given the context of the data, the problem statement, and the intended solution. Describe how the evaluation metric(s) are derived and provide an example of their mathematical representations (if applicable). Complex evaluation metrics should be clearly defined and quantifiable (can be expressed in mathematical or logical terms).
+Kaggle的原始比赛中，提供了这个项目的评估指标 -- log loss值:
 
+LogLoss=−1n∑i=1n[yilog(ŷ i)+(1−yi)log(1−ŷ i)],
+
+where
+n is the number of images in the test set
+ŷ i is the predicted probability of the image being a dog
+yi is 1 if the image is a dog, 0 if cat
+log() is the natural (base e) logarithm
 
 ### 项目设计 Project Design
-_(approx. 1 page)_
 
-In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
+1. 数据预处理
+    - 数据探索：
+        - 基础信息探索：探索数据集中图片的数量等，数据的基本信息。
+        - 可视化探索：随机检索某些图片，了解图片数据的分布情况。
+    - 数据异常处理：发现图片潜在的问题，针对异常的图片进行处理。例：删除图片中未包含猫/狗的数据，避免干扰模型。
+    - 数据增强：
+        - 对图片进行不同的操作(例：旋转、翻转、平移)等，增加模型的泛化能力。
+2. 模型搭建
+    - 迁移学习：使用Keras，导入欲进行迁移学习的模型(VGG, ResNet等)。
+    - 聚合函数：撰写一个函数，计算迁移学习的模型，预测结果前n个属于猫/狗的品种之一的概率为多少。
+
 
 -----------
 
 ### 文章引用
 - [Amir Jirbandey, A brief history of Computer Vision and AI Image Recognition, 2018](https://www.pulsarplatform.com/blog/2018/brief-history-computer-vision-vertical-ai-image-recognition/)
-
-
-**Before submitting your proposal, ask yourself. . .**
-
-- Does the proposal you have written follow a well-organized structure similar to that of the project template?
-- Is each section (particularly **Solution Statement** and **Project Design**) written in a clear, concise and specific fashion? Are there any ambiguous terms or phrases that need clarification?
-- Would the intended audience of your project be able to understand your proposal?
-- Have you properly proofread your proposal to assure there are minimal grammatical and spelling mistakes?
-- Are all the resources used for this project correctly cited and referenced?
+- [Dogs vs. Cats Redux: Kernels Edition](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/)
