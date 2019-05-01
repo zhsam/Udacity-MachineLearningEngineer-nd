@@ -37,7 +37,7 @@ April 20st, 2019
 
 ### 模型标杆 Benchmark Model
 
-这个项目中，在原始有效的比赛时间里，共有1314个提交。以Leaderboard前10%做为标杆，Log Loss值需要达到 0.06320以下。
+这个项目中，在原始有效的比赛时间里，共有1314个提交。以Leaderboard前10%做为标杆，Log Loss值需要达到 0.06127以下。
 
 ### 评估指标 Evaluation Metrics
 
