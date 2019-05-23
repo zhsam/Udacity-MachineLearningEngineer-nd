@@ -24,6 +24,23 @@ May 23, 2019
 
 本项目的数据集由Kaggle提供，其中包含25,000张训练集数据；12,500张测试集数据。数据集可以在[这个地址](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data)获取。
 
+#### 基础信息探索
+通过这段代码，我统计了训练集数据的信息
+```
+from glob import glob
+import seaborn as sns
+
+train_list = [i for i in glob("./input/train/*")]
+count = []
+for i in train_list:
+    count.append(i.split('/')[-1].split('.')[0])
+sns.countplot(count);
+```
+![train_stat.png](https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/train_stat.png)
+
+从上图可以发现，此数据包含12,500张小猫的照片、12,500张狗狗的照片。
+
+#### 可视化探索
 通过一个简单的`getRandomNum`函数，我探索了训练集中的部分图片：
 ```
 import random
@@ -116,11 +133,6 @@ LogLoss=−1n∑i=1n[yilog(ŷi)+(1−yi)log(1−ŷ i)],
 
 ### 项目设计 Project Design
 
-### 数据增强
-- [ ] 旋转
-- [ ] 水平/垂直翻转
-- [ ] 平移
-- [ ] 随机裁剪
 1. 数据预处理
     - 数据探索：
         - 基础信息探索：探索数据集中图片的数量等，数据的基本信息。
@@ -128,6 +140,11 @@ LogLoss=−1n∑i=1n[yilog(ŷi)+(1−yi)log(1−ŷ i)],
     - 数据异常处理：发现图片潜在的问题，针对异常的图片进行处理。例：删除图片中未包含猫/狗的数据，避免干扰模型。
     - 数据增强：
         - 对图片进行不同的操作(例：旋转、翻转、平移)等，增加模型的泛化能力。
+        ### 数据增强
+- [ ] 旋转
+- [ ] 水平/垂直翻转
+- [ ] 平移
+- [ ] 随机裁剪
 2. 模型搭建
     - 迁移学习：使用Keras，导入欲进行迁移学习的模型(VGG, ResNet(Kaiming et al.,2015)等)。
     - 聚合函数：撰写一个函数，计算迁移学习的模型，预测结果前n个属于猫/狗的品种之一的概率为多少。
