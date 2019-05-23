@@ -1,9 +1,12 @@
 # 机器学习算法工程师纳米学位
+
 ## 毕业项目
+
 陈正和 Sam Chen
 May 23, 2019
 
 ## 猫狗大战项目
+
 ### 背景知识 Domain Background 
 本项目属于计算机视觉领域的范畴。早在1960年代，计算机视觉正式成为一门学科领域，当时的目标是自动化图像分析的过程：用计算机模拟人类的视觉系统，让计算机告诉我们它看到了什么。(Amir Jirbandey, 2018) 
 
@@ -13,49 +16,87 @@ May 23, 2019
 
 ### 问题描述 Problem Statement
 
-本项目源自于Kaggle数据竞赛平台上，[猫狗大战图像识别项目](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/overview)，属于**监督学习**领域，**二分类问题**。
+本项目源自于Kaggle数据竞赛平台上，[猫狗大战图像识别项目](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/overview)，属于**监督学习二分类问题**。
 
-通过37,500张猫、狗的图片，训练图像识别的模型，识别图片中的主体是猫还是狗。(若模型识别出图片中的主体是猫，则概率为0；若模型识别出图片中的主体是狗，则概率为1。) 一个潜在的解决方案，是以ImageNet的获胜者模型，例：ResNet(Kaiming et al.,2015)等，通过**迁移学习**的方式，预测图片中的主题为猫或者狗。
+通过25,000张包含猫或者狗的训练集图片，训练图像识别模型，识别图片中的主体是猫，还是狗。(若模型识别出图片中的主体是猫，则概率为0；若模型识别出图片中的主体是狗，则概率为1。) 一个潜在的解决方案，是以ImageNet的获胜者模型，例：ResNet(Kaiming et al.,2015)等，通过**迁移学习**的方式，预测图片中的主题为猫或者狗。
 
 ### 数据集 Datasets and Inputs
 
 本项目的数据集由Kaggle提供，其中包含25,000张训练集数据；12,500张测试集数据。数据集可以在[这个地址](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/data)获取。
 
-图片可能存在几个问题：
-- 图片中未包含猫或者狗
-- 图片的尺寸不固定
-- 图片中的猫或者狗可能在图片比较边缘的位置
+通过一个简单的`getRandomNum`函数，我探索了训练集中的部分图片：
+```
+import random
+from IPython.display import Image
+import glob
 
-在实际执行项目的过程中，将会跟据上述几个问题进行处理。
+train_path = glob.glob("./input/train/*")
+test_path = glob.glob("./input/test/*")
 
-- 图片大小格式不一
-- 有些图片包含人类(train_8113, train_15294, test_10895)
-- 有些有多个动物(train_2989, train_5382, train_10408, train_11027, test_9719, test_8226)
-- 有些图片过小(test_46, test_232, test_419, test_3852, test_8674)
-- 有些图片包含太多白边内容(test_1605)
-- 有些图片肉眼也很难被识别为狗 (test_126)
-- 有些图片为素描、卡通 (test_200, test_1267, test_2140)
+def getRandomNum(maxNum):
+    rand_num = random.randint(0, maxNum)
+    print(rand_num)
+    return rand_num
 
+for i in range(20000):
+    if i >= 12000:
+        rand_num = getRandomNum(24999)
+        print(train_path[rand_num])
+        display(Image(filename=train_path[rand_num]))
+```
 
-#### 范例
-1. 图片中未包含猫或者狗
+经过对图片的探索，发现以下几个特征或问题：
 
-![no_pet_1]('')
-![no_pet_2]('')
-![no_pet_3]('')
+1. 图片大小格式差异较大
+    - 部分图片过小，可能影响模型的训练(dog.9705.jpg, cat.8504.jpg, dog.7011.jpg, cat.4821.jpg, cat.8585.jpg, dog.11686.jpg)
 
-2. 图片的尺寸不固定
+![dog.7011.jpg]('')
 
-![size_issue_1]('')
-![size_issue_2]('')
-![size_issue_3]('')
+![cat.4821.jpg]('')
 
-3. 图片中的猫或者狗可能在图片比较边缘的位置
+![dog.9705.jpg]('')
 
-![edge_1]('')
-![edge_2]('')
-![edge_3]('')
+2. 部分图片为动物侧边照，或者十分模糊(dog.7561.jpg, dog.9687.jpg, dog.10939.jpg, cat.1772.jpg, dog.7164.jpg,cat.241.jpg, cat.8475.jpg, dog.5906.jpg, cat.5324.jpg, dog.8607.jpg, cat.7535.jpg, cat.4042.jpg, dog.10622.jpg, dog.12259.jpg, dog.3430.jpg, dog.516.jpg, dog.3843.jpg, cat.241.jpg, cat.9626.jpg, cat.11337.jpg)
 
+![dog.7561.jpg]('')
+
+![cat.241.jpg]('')
+
+![dog.10622.jpg]('')
+
+3. 部分图片存在文字(dog.12199.jpg, cat.6190.jpg, cat.8296.jpg, cat.2834.jpg, cat.11564.jpg, dog.8209.jpg)
+
+![dog.12199.jpg]('')
+
+![cat.2834.jpg]('')
+
+![cat.11564.jpg]('')
+
+4. 部分图片包含人类(dog.3690.jpg, , dog.4313.jpg, cat.9382.jpg, dog.10307.jpg, dog.6113.jpg,dog.2262.jpg, dog.11935.jpg, dog.3488.jpg, dog.1674.jpg, cat.4426.jpg, dog.11923.jpg,dog.8128.jpg, cat.11125.jpg, dog.7794.jpg, cat.6.jpg, dog.11935.jpg)
+
+![dog.3690.jpg]('')
+![cat.11125.jpg]('')
+![dog.11935.jpg]('')
+
+5. 部分图片包含物品(cat.11148.jpg, dog.7644.jpg, dog.9047.jpg, cat.7073.jpg)
+
+![dog.7644.jpg]('')
+![cat.7073.jpg]('')
+![cat.11148.jpg]('')
+
+6. 部分图片中的动物，在笼子里面(cat.7738.jpg, cat.5834.jpg, dog.3100.jpg, dog.5085.jpg, dog.7760.jpg, dog.10353.jpg, dog.6910.jpg, dog.3972.jpg, dog.8627.jpg, dog.1311.jpg, dog.638.jpg)
+
+![cat.7738.jpg]('')
+![dog.6910.jpg]('')
+![dog.8627.jpg]('')
+
+7. 有些有多只动物(cat.10127.jpg, dog.7914.jpg, cat.2042.jpg, cat.6908.jpg,dog.6487.jpg,cat.678.jpg, dog.8610.jpg, cat.4394.jpg)
+
+![cat.4394.jpg]('')
+![dog.8610.jpg]('')
+![cat.678.jpg]('')
+
+在实际执行项目的过程中，将会跟据上述包含的问题进行处理。
 
 ### 解决方案 Solution Statement
 
@@ -79,6 +120,11 @@ LogLoss=−1n∑i=1n[yilog(ŷi)+(1−yi)log(1−ŷ i)],
 
 ### 项目设计 Project Design
 
+### 数据增强
+- [ ] 旋转
+- [ ] 水平/垂直翻转
+- [ ] 平移
+- [ ] 随机裁剪
 1. 数据预处理
     - 数据探索：
         - 基础信息探索：探索数据集中图片的数量等，数据的基本信息。
