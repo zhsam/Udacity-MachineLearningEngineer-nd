@@ -8,17 +8,17 @@ May 23, 2019
 ## 猫狗大战项目
 
 ### 背景知识 Domain Background 
-本项目属于计算机视觉领域的范畴。早在1960年代，计算机视觉正式成为一门学科领域，当时的目标是自动化图像分析的过程：用计算机模拟人类的视觉系统，让计算机告诉我们它看到了什么。(Amir Jirbandey, 2018) 
+本项目属于计算机视觉领域的范畴。早在1960年代，计算机视觉正式成为一门学科领域，当时的目标是自动化图像分析的过程：用计算机模拟人类的视觉系统，让计算机告诉我们它看到了什么。[1]
 
 到了2010年，得益于深度学习领域的发展与突破，我们图像识别被推到了全新的高度。其中不得不提到的是大型开源项目： [ImageNet](http://www.image-net.org/about-overview) 数据库。ImageNet数据库，包含超过1千万张手动标记的图片，这些图片来自于1000个不同的图片类别。(Udacity,算法工程师纳米学位课程)2010年开始，ImageNet每年都会举办大规模图像识别大赛(ImageNet Large Scale Visual Recognition Competition)。在这个比赛中，不同的团队会协力创造准确率最高的图像识别CNN模型。(Udacity,算法工程师纳米学位课程)
 
-其中的重大突破，包含2012年多伦多大学提出的AlexNet架构；2014年牛津大学的VGG Net 架构；2015年微软研究部门的ResNet(Kaiming et al.,2015)架构等。(Udacity,算法工程师纳米学位课程)从每年胜出者的架构当中，我们可以学习到很多设计CNN架构的技巧，例如：使用了ReLU激活函数、Dropout等技巧，避免过拟合的问题；增加横跨多层的线路，解决过深的架构梯度消失的问题。(Udacity,算法工程师纳米学位课程)
+其中的重大突破，包含2012年多伦多大学提出的AlexNet架构；2014年牛津大学的VGG Net 架构；2015年微软研究部门的ResNet[3]架构等。(Udacity,算法工程师纳米学位课程)从每年胜出者的架构当中，我们可以学习到很多设计CNN架构的技巧，例如：使用了ReLU激活函数、Dropout等技巧，避免过拟合的问题；增加横跨多层的线路，解决过深的架构梯度消失的问题。(Udacity,算法工程师纳米学位课程)
 
 ### 问题描述 Problem Statement
 
 本项目源自于Kaggle数据竞赛平台上，[猫狗大战图像识别项目](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/overview)，属于**监督学习二分类问题**。
 
-通过25,000张包含猫或者狗的训练集图片，训练图像识别模型，识别图片中的主体是猫，还是狗。(若模型识别出图片中的主体是猫，则概率为0；若模型识别出图片中的主体是狗，则概率为1。) 一个潜在的解决方案，是以ImageNet的获胜者模型，例：ResNet(Kaiming et al.,2015)等，通过**迁移学习**的方式，预测图片中的主题为猫或者狗。
+通过25,000张包含猫或者狗的训练集图片，训练图像识别模型，识别图片中的主体是猫，还是狗。(若模型识别出图片中的主体是猫，则概率为0；若模型识别出图片中的主体是狗，则概率为1。) 一个潜在的解决方案，是以ImageNet的获胜者模型，例：ResNet[3]等，通过**迁移学习**的方式，预测图片中的主题为猫或者狗。
 
 ### 数据集 Datasets and Inputs
 
@@ -111,7 +111,7 @@ for i in range(20000):
 
 ### 解决方案 Solution Statement
 
-这个问题，可以通过迁移学习解决。以ResNet(Kaiming et al.,2015)为基底，通过迁移学习的方式，去掉最后一层，并在其后加上池化层、Dense层等。迁移学习搭建的模型，可以识别图片中的主题为某个狗/猫品种的概率。在迁移学习的模型之后，加上一个函数，若识别出的前 n 个结果有 x 个为狗的品种之一，则这个图片为狗的概率为 x/n 。
+这个问题，可以通过迁移学习解决。以ResNet[3]为基底，通过迁移学习的方式，去掉最后一层，并在其后加上池化层、Dense层等。迁移学习搭建的模型，可以识别图片中的主题为某个狗/猫品种的概率。在迁移学习的模型之后，加上一个函数，若识别出的前 n 个结果有 x 个为狗的品种之一，则这个图片为狗的概率为 x/n 。
 
 ### 模型标杆 Benchmark Model
 
@@ -133,22 +133,48 @@ LogLoss=−1n∑i=1n[yilog(ŷi)+(1−yi)log(1−ŷ i)],
 
 ### 项目设计 Project Design
 
-1. 数据预处理
-    - 数据探索：
+1. **数据预处理**
+    1. 数据探索：
         - 基础信息探索：探索数据集中图片的数量等，数据的基本信息。
         - 可视化探索：随机检索某些图片，了解图片数据的分布情况。
-    - 数据异常处理：发现图片潜在的问题，针对异常的图片进行处理。例：删除图片中未包含猫/狗的数据，避免干扰模型。
-    - 数据增强：
+    2. 数据异常处理：发现图片潜在的问题，针对异常的图片进行处理。
+    3. 数据增强：
         - 对图片进行不同的操作(例：旋转、翻转、平移)等，增加模型的泛化能力。
-        ### 数据增强
-- [ ] 旋转
-- [ ] 水平/垂直翻转
-- [ ] 平移
-- [ ] 随机裁剪
-2. 模型搭建
-    - 迁移学习：使用Keras，导入欲进行迁移学习的模型(VGG, ResNet(Kaiming et al.,2015)等)。
-    - 聚合函数：撰写一个函数，计算迁移学习的模型，预测结果前n个属于猫/狗的品种之一的概率为多少。
+    4. 数据归一化：将数据resize到224x224。[4]
+    ```
+    import cv2
+    img = cv2.imread(img_path, cv2.IMREAD_COLOR)
+    img = cv2.resize(img, (224, 224))
+    ```
 
+2. **模型搭建**
+    1. 模型架构：使用ResNet[3] 进行迁移学习。
+    ```
+    model = Sequential()
+    model.add(ResNet50(include_top=False, pooling='max', weights='imagenet'))
+    model.add(Dense(2, activation='relu'))
+    model.compile(optimizer='sgd', loss='categorical_crossentropy', metrics=['accuracy'])
+    model.summary()
+    ```   
+    2. 将切分20%的训练集，做完验证集
+    ```
+    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=2018)
+    ```
+    3. 训练模型，并使用`checkpointer`记录最好的超参数组合
+    ```
+    checkpointer = ModelCheckpoint(filepath='DogCatsResnet50.weights.best.hdf5', verbose=1,
+                              save_best_only=True)
+    model.fit(X_train, y_train,
+            batch_size=64,
+            epochs=20,
+            verbose=1,
+            validation_data=(X_val, y_val),
+            callbacks=[checkpointer],
+            shuffle=True)
+    ```
+3. **测试模型、准备提交**
+    1. 输出 submission.csv。
+    2. 提交到Kaggle，持续优化模型(更改dropout值、进行更多数据增强、尝试不同的模型进行迁移学习等方法)，直到log loss值达到leader borad前10%。
 
 -----------
 
@@ -156,3 +182,4 @@ LogLoss=−1n∑i=1n[yilog(ŷi)+(1−yi)log(1−ŷ i)],
 - [1] [Amir Jirbandey, A brief history of Computer Vision and AI Image Recognition, 2018](https://www.pulsarplatform.com/blog/2018/brief-history-computer-vision-vertical-ai-image-recognition/)
 - [2] [Dogs vs. Cats Redux: Kernels Edition](https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition/)
 - [3] [Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun (2015) Deep Residual Learning for Image Recognition](https://arxiv.org/pdf/1512.03385v1.pdf)
+- [4] [Is there any particular reason why people pick 224x224 image size for imagenet experiments?](https://stackoverflow.com/questions/43434418/is-there-any-particular-reason-why-people-pick-224x224-image-size-for-imagenet-e)
