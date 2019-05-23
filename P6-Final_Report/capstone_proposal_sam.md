@@ -50,51 +50,51 @@ for i in range(20000):
 1. 图片大小格式差异较大
     - 部分图片过小，可能影响模型的训练(dog.9705.jpg, cat.8504.jpg, dog.7011.jpg, cat.4821.jpg, cat.8585.jpg, dog.11686.jpg)
 
-![dog.7011.jpg]('')
+![dog.7011.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/dog.7011.jpg")
 
-![cat.4821.jpg]('')
+![cat.4821.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/cat.4821.jpg")
 
-![dog.9705.jpg]('')
+![dog.9705.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/dog.9705.jpg")
 
 2. 部分图片为动物侧边照，或者十分模糊(dog.7561.jpg, dog.9687.jpg, dog.10939.jpg, cat.1772.jpg, dog.7164.jpg,cat.241.jpg, cat.8475.jpg, dog.5906.jpg, cat.5324.jpg, dog.8607.jpg, cat.7535.jpg, cat.4042.jpg, dog.10622.jpg, dog.12259.jpg, dog.3430.jpg, dog.516.jpg, dog.3843.jpg, cat.241.jpg, cat.9626.jpg, cat.11337.jpg)
 
-![dog.7561.jpg]('')
+![dog.7561.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/dog.7561.jpg")
 
-![cat.241.jpg]('')
+![cat.241.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/cat.241.jpg")
 
-![dog.10622.jpg]('')
+![dog.10622.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/dog.10622.jpg")
 
 3. 部分图片存在文字(dog.12199.jpg, cat.6190.jpg, cat.8296.jpg, cat.2834.jpg, cat.11564.jpg, dog.8209.jpg)
 
-![dog.12199.jpg]('')
+![dog.12199.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/dog.12199.jpg")
 
-![cat.2834.jpg]('')
+![cat.2834.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/cat.2834.jpg")
 
-![cat.11564.jpg]('')
+![cat.11564.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/cat.11564.jpg")
 
 4. 部分图片包含人类(dog.3690.jpg, , dog.4313.jpg, cat.9382.jpg, dog.10307.jpg, dog.6113.jpg,dog.2262.jpg, dog.11935.jpg, dog.3488.jpg, dog.1674.jpg, cat.4426.jpg, dog.11923.jpg,dog.8128.jpg, cat.11125.jpg, dog.7794.jpg, cat.6.jpg, dog.11935.jpg)
 
-![dog.3690.jpg]('')
-![cat.11125.jpg]('')
-![dog.11935.jpg]('')
+![dog.3690.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/dog.3690.jpg")
+![cat.11125.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/cat.11125.jpg")
+![dog.11935.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/dog.11935.jpg")
 
 5. 部分图片包含物品(cat.11148.jpg, dog.7644.jpg, dog.9047.jpg, cat.7073.jpg)
 
-![dog.7644.jpg]('')
-![cat.7073.jpg]('')
-![cat.11148.jpg]('')
+![cat.7073.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/cat.7073.jpg")
+![dog.7644.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/dog.7644.jpg")
+![cat.11148.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/cat.11148.jpg")
 
 6. 部分图片中的动物，在笼子里面(cat.7738.jpg, cat.5834.jpg, dog.3100.jpg, dog.5085.jpg, dog.7760.jpg, dog.10353.jpg, dog.6910.jpg, dog.3972.jpg, dog.8627.jpg, dog.1311.jpg, dog.638.jpg)
 
-![cat.7738.jpg]('')
-![dog.6910.jpg]('')
-![dog.8627.jpg]('')
+![cat.7738.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/cat.7738.jpg")
+![dog.6910.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/dog.6910.jpg")
+![dog.8627.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/dog.8627.jpg")
 
 7. 有些有多只动物(cat.10127.jpg, dog.7914.jpg, cat.2042.jpg, cat.6908.jpg,dog.6487.jpg,cat.678.jpg, dog.8610.jpg, cat.4394.jpg)
 
-![cat.4394.jpg]('')
-![dog.8610.jpg]('')
-![cat.678.jpg]('')
+![cat.4394.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/cat.4394.jpg")
+![dog.8610.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/dog.8610.jpg")
+![cat.678.jpg]("https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/cat.678.jpg")
 
 在实际执行项目的过程中，将会跟据上述包含的问题进行处理。
 
