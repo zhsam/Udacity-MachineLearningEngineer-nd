@@ -36,7 +36,7 @@ for i in train_list:
     count.append(i.split('/')[-1].split('.')[0])
 sns.countplot(count);
 ```
-![train_stat.png](https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/train_stat.png)
+![train_stat.png](https://raw.githubusercontent.com/zhsam/Udacity-MachineLearningEngineer-nd/master/P6-Final_Report/img/train_stat-1.png)
 
 从上图可以发现，此数据包含12,500张小猫的照片、12,500张狗狗的照片。
 
